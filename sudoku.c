@@ -153,6 +153,7 @@ void solve(int** board)
                     freeAlocatedBoard(stack_board);
                     while ((stack_board = deleteLastStack(&stack)) != NULL)
                         freeAlocatedBoard(stack_board);
+                    printf("\nNumber of solutions: %d\n", solved);
                     return;
                 }
             }
