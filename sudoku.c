@@ -26,7 +26,7 @@ int** readBoardFromFile(char* file_path);
 int** readBoardFromConsole();
 
 int show_all_solutions = 0;
-int just_count_how_many_is_solutions=0;
+int just_count_how_many_is_solutions = 0;
 
 int main(int argc, char* argv[])
 {
@@ -35,17 +35,18 @@ int main(int argc, char* argv[])
     int** board;
 
     // reading arguments to program
+    printf("\nProgram options: \n");
     while ((option = getopt(argc, argv, "ac")) != -1)
     {
         switch (option)
         {
             case 'a':
-                printf("option a\n");
+                printf("option: show all solutions\n");
                 show_all_solutions = 1;
                 break;
             case 'c':
-                printf("option c\n");
-                just_count_how_many_is_solutions=1;
+                printf("option: just count posible solutions\n");
+                just_count_how_many_is_solutions = 1;
                 break;
             case '?':
                 usage();
@@ -61,189 +62,113 @@ int main(int argc, char* argv[])
 
     // read board
     if (file_path != NULL)
-        board=readBoardFromFile(file_path);
+        board = readBoardFromFile(file_path);
     else
-        board=readBoardFromConsole();
+        board = readBoardFromConsole();
 
-    printf("Loaded Board: \n");
+    printf("\nLoaded Board: \n");
     printBoard(board);
 
     // solving sudoku
     printf("\n\nSolved sudoku: \n");
     solve(board);
-    
-    int arr[N][N][10], i, j, k;
-    int ans, ans2;
-
-    /*ans = check(board);
-    printf("Checked board: %d\n", ans);
-
-    int** copy = copyBoard(board);
-    if (copy == NULL)
-        ERR("copying board");
-
-    initializeArrWithOnes(arr);
-    giveArrayPossibilities(board, arr);
-    // printBoardOfPossibilities(arr);
-
-    while (writeDigitIfOnePossibility(board, arr) == 1)
-    {
-        initializeArrWithOnes(arr);
-        giveArrayPossibilities(board, arr);
-    }
-
-    printBoard2(board);
-    printBoard2(copy);
-
-    // free memory
-    for (i = 0; i < W; i++)
-    {
-        free(copy[i]);
-    }
-    free(copy);
-
-    printf("---------------------------------------\n\n");
-    
-    node* stack = NULL;
-    int** copy1 = copyBoard(board);
-    int** copy2 = copyBoard(board);
-    int** copy3 = copyBoard(board);
-    copy1[0][0] = 1;
-    copy2[0][0] = 2;
-    copy3[0][0] = 3;
-    
-    addToStack(&stack, copy1);
-    addToStack(&stack, copy2);
-    addToStack(&stack, copy3);
-
-    int** stackBoard;
-    while ((stackBoard = deleteLastStack(&stack)) != NULL)
-    {
-        printf("\n");
-        printBoard2(stackBoard);
-
-        for (i = 0; i < W; i++)
-        {
-            free(stackBoard[i]);
-        }
-        free(stackBoard);
-    }*/
-
-    
 
     freeAlocatedBoard(board);
-    
+
     return EXIT_SUCCESS;
 }
 
 void solve(int** board)
 {
-    node* stack=NULL; // important that is NULL
-    int** stack_board, **new_board;
-    int arr[N][N][10],i,j,k, empty,ans, solved=0;
+    node* stack = NULL;  // important that is NULL
+    int **stack_board, **new_board;
+    int arr[N][N][10], i, j, k, empty, ans, solved = 0;
 
-    /*do
+    stack_board = copyBoard(board);
+    addToStack(&stack, stack_board);
+
+    // we solving until stack is empty
+    while ((stack_board = deleteLastStack(&stack)) != NULL)
     {
-        initializeArrWithOnes(arr);
-        giveArrayPossibilities(board, arr);
-    }while(writeDigitIfOnePossibility(board, arr)==1);
-
-    stack_board=copyBoard(board);
-    addToStack(&stack,stack_board);
-    stack_board=deleteLastStack(&stack);
-    freeAlocatedBoard(stack_board);
-    stack_board=deleteLastStack(&stack);
-    freeAlocatedBoard(stack_board);*/
-
-    stack_board=copyBoard(board);
-    addToStack(&stack,stack_board);
-
-    int num=0;
-    while((stack_board=deleteLastStack(&stack))!=NULL)
-    {
-        if(check(stack_board)==0)
+        // checking if board is correct
+        if (check(stack_board) == 0)
         {
             freeAlocatedBoard(stack_board);
             continue;
-        } 
+        }
 
+        // writing to board digits that are only posibility
         do
         {
             initializeArrWithOnes(arr);
             giveArrayPossibilities(stack_board, arr);
-        }while (writeDigitIfOnePossibility(stack_board, arr) == 1);
+        } while (writeDigitIfOnePossibility(stack_board, arr) == 1);
 
-        initializeArrWithOnes(arr);
-        giveArrayPossibilities(stack_board, arr);
-        //printBoardOfPossibilities(arr);
-        
-        // add new possibilities to stack
-        
-        empty=1;
-        for(i=0; i<N; i++)
+        // now we have situations where is posssible to write to all remained fields at least two digits
+        // so we write first posibility and add it to stack and write second and add to stack.
+        // for example in field (1,1) we can write 3 and 5 and in field (2,8) we can write 3,5,6 so we copy board
+        // and write in position (1,1) 3 and add it to stack and then we copy board and wwrite in position (1,1) 5 and
+        // we exit for
+        empty = 1;
+        for (i = 0; i < N; i++)
         {
-            for(j=0; j<N; j++)
+            for (j = 0; j < N; j++)
             {
-                for(k=1; k<10; k++)
+                for (k = 1; k < 10; k++)
                 {
-                    if(arr[i][j][k]!=0)
+                    if (arr[i][j][k] != 0)
                     {
-                        empty=0;
-                        new_board=copyBoard(stack_board);
-                        new_board[i][j]=k;
-                        //printf("%d %d\n",i,j);
-                        //printBoard2(new_board);
-                        addToStack(&stack,new_board);
+                        empty = 0;
+                        new_board = copyBoard(stack_board);
+                        new_board[i][j] = k;
+                        addToStack(&stack, new_board);
                     }
                 }
-                if(empty==0)
+                if (empty == 0)
                     break;
             }
-            if(empty==0)
-                    break;
+            if (empty == 0)
+                break;
         }
-        num++;
-        if(num==20)
+
+        // we can not write anything to board
+        if (empty == 1)
         {
-            //exit(0);
-        }
-            
-        //printf("next\n");
-        if(empty==1)
-        {
-            ans=check(stack_board);
-            if(ans==1)
+            // so we check if board is correct
+            if (check(stack_board) == 1)
             {
-                if(just_count_how_many_is_solutions==1)
+                solved++;  // board is correct
+                if (just_count_how_many_is_solutions == 1)
                 {
-                    solved++;
-                    if(solved%1000==0)
-                        printf("%d ",solved);
-                    if(solved%10000==0)
-                        printf("\n");
+                    printf(".");
+                    if (solved % 10 == 0)
+                        printf(" (%d)\n", solved);
                 }
-                if(just_count_how_many_is_solutions==0)
+                else if (just_count_how_many_is_solutions == 0)
                     printBoard(stack_board);
-                if(show_all_solutions==0)
+
+                // user want just to write one solution so we have to free alocated memory on stack and we exit
+                if (show_all_solutions == 0)
                 {
                     freeAlocatedBoard(stack_board);
-                    while((stack_board=deleteLastStack(&stack))!=NULL)
+                    while ((stack_board = deleteLastStack(&stack)) != NULL)
                         freeAlocatedBoard(stack_board);
                     return;
                 }
             }
-                
-            
         }
 
         // free memory of board taken from stack
         freeAlocatedBoard(stack_board);
     }
+
+    printf("\nNumber of solutions: %d\n", solved);
 }
 
 void freeAlocatedBoard(int** board)
 {
-    if(board==NULL) return;
+    if (board == NULL)
+        return;
     int i;
     for (i = 0; i < W; i++)
     {
@@ -251,7 +176,6 @@ void freeAlocatedBoard(int** board)
     }
     free(board);
 }
-
 void usage()
 {
     fprintf(stderr, "USAGE: [-a] [file_path]\n");
@@ -345,13 +269,15 @@ void printBoardOfPossibilities(int arr[N][N][10])
 int** readBoardFromFile(char* file_path)
 {
     struct stat statbuf;
-    int ch, index = 0,i,j, **board;
+    int ch, index = 0, i, j, **board;
 
     // initialize board
-    if((board = (int**)malloc((sizeof(int*) * N)))==NULL) return NULL;
-    for(i=0; i<N; i++)
-        if((board[i]= (int*)malloc(sizeof(int) * N))==NULL) return NULL;
-        
+    if ((board = (int**)malloc((sizeof(int*) * N))) == NULL)
+        return NULL;
+    for (i = 0; i < N; i++)
+        if ((board[i] = (int*)malloc(sizeof(int) * N)) == NULL)
+            return NULL;
+
     if (stat(file_path, &statbuf) == -1)
     {
         if (errno == ENOENT)
@@ -384,11 +310,13 @@ int** readBoardFromFile(char* file_path)
 }
 int** readBoardFromConsole()
 {
-    int c, index = 0,i,**board;
-    if((board = (int**)malloc((sizeof(int*) * N)))==NULL) return NULL;
-    for(i=0; i<N; i++)
-        if((board[i]= (int*)malloc(sizeof(int) * N))==NULL) return NULL;
-    
+    int c, index = 0, i, **board;
+    if ((board = (int**)malloc((sizeof(int*) * N))) == NULL)
+        return NULL;
+    for (i = 0; i < N; i++)
+        if ((board[i] = (int*)malloc(sizeof(int) * N)) == NULL)
+            return NULL;
+
     printf("Reading board from console...\n");
     while ((c = fgetc(stdin)) != EOF)
     {
