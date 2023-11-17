@@ -45,7 +45,7 @@ If you want to program count all posible solutions, add flag a and flag c
 You can also give a empty sudoku board (contains 81 zeros) and program will start write
 all posible sudokus
  ```bash
- ./prog someExampleBoards/empty -a -c
+ ./prog someExampleBoards/empty -a 
   ```
 ## Boards
 
