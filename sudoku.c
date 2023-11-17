@@ -307,6 +307,9 @@ int** readBoardFromFile(char* file_path)
     // closing file
     if (fclose(file) != 0)
         ERR("file close");
+
+    if(index<N*N)
+        ERR("wrong board loaded");
     return board;
 }
 int** readBoardFromConsole()
