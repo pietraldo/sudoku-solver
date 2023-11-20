@@ -1,6 +1,6 @@
 # sudoku-solver
 
-This program solves sudoku. It is written in C in POSIX standard. 
+This program solves sudoku 9x9. It is written in C in POSIX standard. 
 
 ## Installation
 
@@ -49,7 +49,7 @@ all posible sudokus
   ```
 ## Boards
 
-Sudoku boards must be in this format
+Sudoku boards must be in this format 9x9. If field is empty in sudoku you should write 0.
  ```bash
 308504900
 900000020
