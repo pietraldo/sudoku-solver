@@ -1,6 +1,6 @@
 # sudoku-solver
 
-This program solve sudoku. It is wriiten in C in POSIX standard. 
+This program solves sudoku. It is written in C in POSIX standard. 
 
 ## Installation
 
@@ -42,7 +42,7 @@ If you want to program count all posible solutions, add flag a and flag c
  ```bash
  ./prog someExampleBoards/board1 -a -c
   ```
-You can also give a empty sudoku board (contains 81 zeros) and program will start write
+You can also give a empty sudoku board (contains 81 zeros) and program will start writing
 all posible sudokus
  ```bash
  ./prog someExampleBoards/empty -a 
