@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "board_correctness.h"
+#include "../headers/board_correctness.h"
 
 int checkRow(int** board, int num)
 {

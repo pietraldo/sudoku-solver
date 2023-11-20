@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "array_possibilities.h"
+#include "../headers/array_possibilities.h"
 
 void giveArrayPossibilities(int** board, int arr[N][N][10])
 {

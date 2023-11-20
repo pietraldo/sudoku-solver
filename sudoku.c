@@ -5,10 +5,10 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#include "array_possibilities.h"
-#include "board_correctness.h"
-#include "solving.h"
-#include "stack.h"
+#include "headers/array_possibilities.h"
+#include "headers/board_correctness.h"
+#include "headers/solving.h"
+#include "headers/stack.h"
 
 #define N 9
 #define ERR(source) (perror(source), fprintf(stderr, "%s:%d\n", __FILE__, __LINE__), exit(EXIT_FAILURE))

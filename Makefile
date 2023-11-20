@@ -11,19 +11,19 @@ all: prog
 prog: sudoku.o board_correctness.o array_possibilities.o solving.o stack.o
 	gcc $(CFLAGS) -o prog sudoku.o board_correctness.o array_possibilities.o solving.o stack.o
 
-board_correctness.o: board_correctness.c board_correctness.h
-	gcc -o board_correctness.o -c board_correctness.c
+board_correctness.o: src/board_correctness.c headers/board_correctness.h
+	gcc -o board_correctness.o -c src/board_correctness.c
 
-array_possibilities.o: array_possibilities.c board_correctness.h
-	gcc -o array_possibilities.o -c array_possibilities.c
+array_possibilities.o: src/array_possibilities.c headers/board_correctness.h
+	gcc -o array_possibilities.o -c src/array_possibilities.c
 
-solving.o: solving.c solving.h 
-	gcc -o solving.o -c solving.c
+solving.o: src/solving.c headers/solving.h 
+	gcc -o solving.o -c src/solving.c
 
-stack.o: stack.c stack.h 
-	gcc -o stack.o -c stack.c
+stack.o: src/stack.c headers/stack.h 
+	gcc -o stack.o -c src/stack.c
 
-sudoku.o: sudoku.c board_correctness.h array_possibilities.h solving.h stack.h
+sudoku.o: sudoku.c headers/board_correctness.h headers/array_possibilities.h headers/solving.h headers/stack.h
 	gcc -o sudoku.o -c sudoku.c
 
 clean:

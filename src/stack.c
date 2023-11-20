@@ -1,4 +1,4 @@
-#include "stack.h"
+#include "../headers/stack.h"
 #include <stdio.h>
 #include <stdlib.h>
 

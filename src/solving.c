@@ -1,4 +1,4 @@
-#include "solving.h"
+#include "../headers/solving.h"
 #include <stdio.h>
 
 int writeDigitIfOnePossibility(int** board, int arr[N][N][10])
